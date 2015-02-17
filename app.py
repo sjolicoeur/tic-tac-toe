@@ -28,7 +28,7 @@ def request_wants_json():
         request.accept_mimetypes['text/html']
 
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 @app.route("/game/", methods=["GET", "POST"])
 def create_new_game():
     if request.method == 'POST':
@@ -42,7 +42,7 @@ def create_new_game():
     
 
 @flask_sijax.route(app, "/game/<room_id>")
-def game(room_id): #, methods=["GET", "POST"]):
+def game(room_id): 
     def update_game_object(position):
         position = int(position)
         current_player = game_object.get_current_player()
