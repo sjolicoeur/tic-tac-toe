@@ -4,11 +4,9 @@
 
 <style>
     #board {
-
         width: 610px;
         height: 600px;
         font-size: 60px;
-        /*border: 1px solid black;*/
     }
     .cell {
         width: 200px;
@@ -28,6 +26,8 @@
         background-color: green;
     }
 </style>
+
+
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
         <h2 id="winner">
@@ -45,28 +45,29 @@
 
 <div class="row">
     <div class="col-md-3">
-<table class="table table-striped table-bordered">
-    <thead>
-        <tr><th>Player</th><th>Symbol</th><tr>
-    </thead>
-    {% for player in game_object.players %}
-        <tr>
-            <td>{{ player.type }}</td><td>{{ player.symbol }}</td>
-        </tr>
-    {% endfor %}
-</table>
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr><th>Player</th><th>Symbol</th><tr>
+            </thead>
+            {% for player in game_object.players %}
+                <tr>
+                    <td>{{ player.type }}</td><td>{{ player.symbol }}</td>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
 
     <div class="col-md-6">
-    <div id="board">
-        {% for cell in vars.game.board %}
-            <div id="{{ loop.index0 }}" class="cell {% if loop.index0 in vars.game.winning_row %}green{% endif %}">
-                {% if cell %}{{ cell }}{% endif %}
-            </div>
-        {% endfor %}
+        <div id="board">
+            {% for cell in vars.game.board %}
+                <div id="{{ loop.index0 }}" class="cell {% if loop.index0 in vars.game.winning_row %}green{% endif %}">
+                    {% if cell %}{{ cell }}{% endif %}
+                </div>
+            {% endfor %}
+        </div>
     </div>
 </div>
-</div>
+
 <script type="text/javascript">
 $( document ).ready(function() {
     console.log( "ready!" );
@@ -74,7 +75,6 @@ $( document ).ready(function() {
         Sijax.request('make_move', [$(this).attr("id")]);
     })
 });
-
 </script>
 
 {% endblock %}

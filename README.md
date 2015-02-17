@@ -19,6 +19,4 @@ to run on the default port: `python app.py`
 
 
 # To do:
-- create new game
-- style the pages
 - API
