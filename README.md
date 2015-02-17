@@ -18,5 +18,3 @@ Install the requirements with : `pip install -r requirements.txt`
 to run on the default port: `python app.py`
 
 
-# To do:
-- API having issues with `ValueError: No JSON object could be decoded` errors
