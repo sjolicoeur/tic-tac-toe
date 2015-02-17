@@ -3,13 +3,13 @@ import os, sys
 path = os.path.join('.', os.path.dirname(__file__), '../')
 sys.path.append(path)
 
-from flask import Flask, g, render_template, redirect, url_for
+from flask import Flask, g, render_template, redirect, url_for, request
 import flask_sijax
 from werkzeug.contrib.cache import SimpleCache
 import shortuuid
 from game import Game
 
-cache = SimpleCache()
+cache = SimpleCache() # not good for multiprocess
 app = Flask(__name__)
 
 app.config["SIJAX_STATIC_PATH"] = os.path.join('.', os.path.dirname(__file__), 'static/js/sijax/')
@@ -20,14 +20,14 @@ flask_sijax.Sijax(app)
 @app.route("/")
 @app.route("/game/", methods=["GET", "POST"])
 def create_new_game():
-    # if request.method == 'POST':
-    room_id = shortuuid.ShortUUID().random(length=4)
-    game_object = Game()
-    cache.set(room_id, game_object, timeout=60 * 60*24) # game is good for 24h
-    # redirect to game room
-    return redirect(url_for('game', room_id=room_id))
+    if request.method == 'POST':
+        room_id = shortuuid.ShortUUID().random(length=4)
+        game_object = Game()
+        cache.set(room_id, game_object, timeout=60 * 60*24) # game is good for 24h
+        # redirect to game room
+        return redirect(url_for('game', room_id=room_id))
     # otherwise list rooms
-
+    return render_template('index.html')
     # return
 
 @flask_sijax.route(app, "/game/<room_id>")

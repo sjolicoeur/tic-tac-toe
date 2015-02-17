@@ -1,16 +1,6 @@
-<html>
-<head>
-    <script type="text/javascript"
-        src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
-    <script type="text/javascript" src="/static/js/sijax/sijax.js"></script>
-    <script type="text/javascript">
-        {{ g.sijax.get_js()|safe }}
-    </script>
-</head>
+{% extends "base.html" %}
 
-<body>
-
-
+{% block content %}
 
 <style>
     #board {
@@ -31,27 +21,31 @@
         line-height: 3em;
 
     }
-    td {
+    #winner {
         text-align: center;
-        /*border: 1px solid black;*/
-        /*width: 100px;
-        height: 100px;*/
     }
     .green {
         background-color: green;
     }
 </style>
-<h2 id="winner">
-{% if game_object.is_game_ended %}
-    {% if game_object.is_winning_board %}
-        '{{ game_object.winner_symbol }}' has Won the game!"
-    {% else %}
-        Uh! Oh! it's a draw!
-    {% endif %}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <h2 id="winner">
+        {% if game_object.is_game_ended %}
+            {% if game_object.is_winning_board %}
+                '{{ game_object.winner_symbol }}' has Won the game!"
+            {% else %}
+                Uh! Oh! it's a draw!
+            {% endif %}
 
-{% endif %}
-</h2>
-<table>
+        {% endif %}
+        </h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+<table class="table table-striped table-bordered">
     <thead>
         <tr><th>Player</th><th>Symbol</th><tr>
     </thead>
@@ -61,7 +55,9 @@
         </tr>
     {% endfor %}
 </table>
+    </div>
 
+    <div class="col-md-6">
     <div id="board">
         {% for cell in vars.game.board %}
             <div id="{{ loop.index0 }}" class="cell {% if loop.index0 in vars.game.winning_row %}green{% endif %}">
@@ -69,7 +65,8 @@
             </div>
         {% endfor %}
     </div>
-
+</div>
+</div>
 <script type="text/javascript">
 $( document ).ready(function() {
     console.log( "ready!" );
@@ -80,6 +77,5 @@ $( document ).ready(function() {
 
 </script>
 
+{% endblock %}
 
-</body>
-</html>

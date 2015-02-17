@@ -2,7 +2,7 @@
 
 ## Description
 
-Simple web based game of tic-tac-toe. Sijax integration for the interactivity.
+Simple web based game of tic-tac-toe. Sijax integration for the interactivity. Classic rules apply!
 
 ### Assumptions:
 
@@ -21,3 +21,4 @@ to run on the default port: `python app.py`
 # To do:
 - create new game
 - style the pages
+- API
