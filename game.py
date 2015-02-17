@@ -168,3 +168,8 @@ class Game(object):
                 return True
         return False
 
+    def serialize_to_dict(self):
+        return {
+            "board": self.board,
+            "players": [{"symbol": p.symbol,"player_type": p.type} for p in self.players]
+        }

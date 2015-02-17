@@ -3,10 +3,11 @@ import os, sys
 path = os.path.join('.', os.path.dirname(__file__), '../')
 sys.path.append(path)
 
-from flask import Flask, g, render_template, redirect, url_for, request
+from flask import Flask, g, render_template, redirect, url_for, request, jsonify
 import flask_sijax
 from werkzeug.contrib.cache import SimpleCache
 import shortuuid
+import json
 from game import Game
 
 cache = SimpleCache() # not good for multiprocess
@@ -17,6 +18,16 @@ app.config["SIJAX_JSON_URI"] = '/static/js/sijax/json2.js'
 
 flask_sijax.Sijax(app)
 
+
+# helper to id if the request is json 
+def request_wants_json():
+    best = request.accept_mimetypes \
+        .best_match(['application/json', 'text/html'])
+    return best == 'application/json' and \
+        request.accept_mimetypes[best] > \
+        request.accept_mimetypes['text/html']
+
+
 @app.route("/")
 @app.route("/game/", methods=["GET", "POST"])
 def create_new_game():
@@ -25,15 +36,14 @@ def create_new_game():
         game_object = Game()
         cache.set(room_id, game_object, timeout=60 * 60*24) # game is good for 24h
         # redirect to game room
-        return redirect(url_for('game', room_id=room_id))
-    # otherwise list rooms
+        url = url_for('game', room_id=room_id)
+
     return render_template('index.html')
-    # return
+    
 
 @flask_sijax.route(app, "/game/<room_id>")
 def game(room_id): #, methods=["GET", "POST"]):
-    def make_move_handler(obj_response, position):
-        print "this is the position to be played", position
+    def update_game_object(position):
         position = int(position)
         current_player = game_object.get_current_player()
 
@@ -53,6 +63,10 @@ def game(room_id): #, methods=["GET", "POST"]):
 
         ### store state
         cache.set(room_id, game_object, timeout=60 * 60*24) # game is good for 24h
+
+
+    def make_move_handler(obj_response, position):
+        update_game_object(position)
         
         ### update board
         for i, cell in enumerate(game_object.board):
@@ -66,17 +80,13 @@ def game(room_id): #, methods=["GET", "POST"]):
                 obj_response.html("#winner", "Uh! Oh! it's a draw!")
 
     game_object = cache.get(room_id)
-
-    vars = {
-        "game": game_object
-    }
-
     # register the sijax callbacks
     if g.sijax.is_sijax_request:
         g.sijax.register_callback('make_move', make_move_handler)
         return g.sijax.process_request()
-    return render_template('game.html', vars=vars, game_object=game_object)
+    return render_template('game.html', game_object=game_object)
 
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
+

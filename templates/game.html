@@ -59,8 +59,8 @@
 
     <div class="col-md-6">
         <div id="board">
-            {% for cell in vars.game.board %}
-                <div id="{{ loop.index0 }}" class="cell {% if loop.index0 in vars.game.winning_row %}green{% endif %}">
+            {% for cell in game_object.board %}
+                <div id="{{ loop.index0 }}" class="cell {% if loop.index0 in game_object.winning_row %}green{% endif %}">
                     {% if cell %}{{ cell }}{% endif %}
                 </div>
             {% endfor %}
