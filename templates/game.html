@@ -1,0 +1,85 @@
+<html>
+<head>
+    <script type="text/javascript"
+        src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/sijax/sijax.js"></script>
+    <script type="text/javascript">
+        {{ g.sijax.get_js()|safe }}
+    </script>
+</head>
+
+<body>
+
+
+
+<style>
+    #board {
+
+        width: 610px;
+        height: 600px;
+        font-size: 60px;
+        /*border: 1px solid black;*/
+    }
+    .cell {
+        width: 200px;
+        height: 200px;
+        text-align: center;
+        border: 1px solid black;
+        float: left;
+        padding: 0px;
+        margin: 0px;
+        line-height: 3em;
+
+    }
+    td {
+        text-align: center;
+        /*border: 1px solid black;*/
+        /*width: 100px;
+        height: 100px;*/
+    }
+    .green {
+        background-color: green;
+    }
+</style>
+<h2 id="winner">
+{% if game_object.is_game_ended %}
+    {% if game_object.is_winning_board %}
+        '{{ game_object.winner_symbol }}' has Won the game!"
+    {% else %}
+        Uh! Oh! it's a draw!
+    {% endif %}
+
+{% endif %}
+</h2>
+<table>
+    <thead>
+        <tr><th>Player</th><th>Symbol</th><tr>
+    </thead>
+    {% for player in game_object.players %}
+        <tr>
+            <td>{{ player.type }}</td><td>{{ player.symbol }}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+    <div id="board">
+        {% for cell in vars.game.board %}
+            <div id="{{ loop.index0 }}" class="cell {% if loop.index0 in vars.game.winning_row %}green{% endif %}">
+                {% if cell %}{{ cell }}{% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+<script type="text/javascript">
+$( document ).ready(function() {
+    console.log( "ready!" );
+    $(".cell").click(function() {
+        Sijax.request('make_move', [$(this).attr("id")]);
+    })
+});
+
+</script>
+
+
+</body>
+</html>
