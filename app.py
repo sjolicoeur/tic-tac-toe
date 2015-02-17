@@ -37,7 +37,7 @@ def create_new_game():
         cache.set(room_id, game_object, timeout=60 * 60*24) # game is good for 24h
         # redirect to game room
         url = url_for('game', room_id=room_id)
-
+        return redirect(url)
     return render_template('index.html')
     
 
