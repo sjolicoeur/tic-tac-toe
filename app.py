@@ -39,7 +39,10 @@ def create_new_game():
         url = url_for('game', room_id=room_id)
         return redirect(url)
     return render_template('index.html')
-    
+   
+@app.route("/about") 
+def about():
+    return render_template('about.html')
 
 @flask_sijax.route(app, "/game/<room_id>")
 def game(room_id): #, methods=["GET", "POST"]):

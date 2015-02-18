@@ -19,9 +19,9 @@
       <div class="header">
         <nav>
           <ul class="nav nav-pills pull-right">
-            <li role="presentation"><a href="/">Home</a></li>
-            <li role="presentation"><a href="/game/">New Game</a></li>
-            <li role="presentation"><a href="/About/">About</a></li>
+            <li role="presentation"><a href="{{ url_for('create_new_game') }}">Home</a></li>
+            <li role="presentation"><a href="{{ url_for('create_new_game') }}">New Game</a></li>
+            <li role="presentation"><a href="{{ url_for('about') }}">About</a></li>
           </ul>
         </nav>
         <h3 class="text-muted">Tic Tac Toe</h3>
